@@ -3,9 +3,9 @@ import os
 import numpy as np
 import tensorflow as tf
 
-from WMMSE_Unfolding.config import ExperimentConfig
-from WMMSE_Unfolding.models.unfolded_graph import build_unfolded_graph
-from WMMSE_Unfolding.utils import compute_channel
+from config import ExperimentConfig
+from models.unfolded_graph import build_unfolded_graph
+from utils import compute_channel
 
 tf1 = tf.compat.v1
 
