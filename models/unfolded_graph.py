@@ -104,21 +104,26 @@ def build_unfolded_graph(cfg: ExperimentConfig):
             cfg.nr_of_users, cfg.nr_of_BS_antennas, cfg.nr_of_samples_per_batch
         )
 
+ 
         transmitter_precoder2, step_size2 = PGD_step(
             step_size2_init[loop], 'PGD_step2',
             mse_weights, user_weights, receiver_precoder, channel_input,
-            transmitter_precoder1, cfg.total_power
+            transmitter_precoder1, cfg.total_power,
+            cfg.nr_of_users, cfg.nr_of_BS_antennas, cfg.nr_of_samples_per_batch
         )
         transmitter_precoder3, step_size3 = PGD_step(
             step_size3_init[loop], 'PGD_step3',
             mse_weights, user_weights, receiver_precoder, channel_input,
-            transmitter_precoder2, cfg.total_power
+            transmitter_precoder2, cfg.total_power,
+            cfg.nr_of_users, cfg.nr_of_BS_antennas, cfg.nr_of_samples_per_batch
         )
         transmitter_precoder, step_size4 = PGD_step(
             step_size4_init[loop], 'PGD_step4',
             mse_weights, user_weights, receiver_precoder, channel_input,
-            transmitter_precoder3, cfg.total_power
+            transmitter_precoder3, cfg.total_power,
+            cfg.nr_of_users, cfg.nr_of_BS_antennas, cfg.nr_of_samples_per_batch
         )
+
 
         initial_transmitter_precoder = transmitter_precoder
 
