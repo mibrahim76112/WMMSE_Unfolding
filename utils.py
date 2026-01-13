@@ -69,15 +69,16 @@ def compute_sinr_nn(channel, precoder, noise_power, user_id, nr_of_users):
     return result
 
 
-def compute_WSR_nn(user_weights, channel, precoder, noise_power, nr_of_users):
-
+def compute_WSR_nn(user_weights, channel, precoder, noise_power, nr_of_users, nr_of_samples_per_batch):
    result = 0
    for batch_index in range(nr_of_samples_per_batch):
-    for user_index in range(nr_of_users):
-        user_sinr = compute_sinr_nn(channel[batch_index], precoder[batch_index], noise_power, user_index,nr_of_users)
-        result = result + user_weights[batch_index][user_index]*(tf.math.log(1 + user_sinr)/tf.math.log(tf.cast(2.0,tf.float64)))
-
+     for user_index in range(nr_of_users):
+        user_sinr = compute_sinr_nn(channel[batch_index], precoder[batch_index], noise_power, user_index, nr_of_users)
+        result = result + user_weights[batch_index][user_index] * (
+            tf.math.log(1 + user_sinr) / tf.math.log(tf.cast(2.0, tf.float64))
+        )
    return result
+
 
 
 # Computes a channel realization and returns it in two formats, one for the WMMSE and one for the deep unfolded WMMSE.

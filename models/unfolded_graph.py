@@ -137,7 +137,11 @@ def build_unfolded_graph(cfg: ExperimentConfig):
     final_precoder = initial_transmitter_precoder
 
     WSR = tf.reduce_sum(tf.stack(profit))
-    WSR_final = compute_WSR_nn(user_weights, channel_input, final_precoder, cfg.noise_power, cfg.nr_of_users) / cfg.nr_of_samples_per_batch
+   # WSR_final = compute_WSR_nn(user_weights, channel_input, final_precoder, cfg.noise_power, cfg.nr_of_users) / cfg.nr_of_samples_per_batch
+    WSR_final = compute_WSR_nn(
+        user_weights, channel_input, final_precoder,
+        cfg.noise_power, cfg.nr_of_users, cfg.nr_of_samples_per_batch
+    ) / cfg.nr_of_samples_per_batch
 
     optimizer = tf1.train.AdamOptimizer(learning_rate=cfg.learning_rate).minimize(-WSR)
 
