@@ -132,7 +132,11 @@ def build_unfolded_graph(cfg: ExperimentConfig):
         all_step_size3_temp.append(step_size3)
         all_step_size4_temp.append(step_size4)
 
-        profit.append(compute_WSR_nn(user_weights, channel_input, initial_transmitter_precoder, cfg.noise_power, cfg.nr_of_users))
+      #  profit.append(compute_WSR_nn(user_weights, channel_input, initial_transmitter_precoder, cfg.noise_power, cfg.nr_of_users))
+        profit.append(compute_WSR_nn(
+            user_weights, channel_input, initial_transmitter_precoder,
+            cfg.noise_power, cfg.nr_of_users, cfg.nr_of_samples_per_batch
+        ))
 
     all_step_size1 = tf.stack(all_step_size1_temp)
     all_step_size2 = tf.stack(all_step_size2_temp)
@@ -147,6 +151,7 @@ def build_unfolded_graph(cfg: ExperimentConfig):
         user_weights, channel_input, final_precoder,
         cfg.noise_power, cfg.nr_of_users, cfg.nr_of_samples_per_batch
     ) / cfg.nr_of_samples_per_batch
+
 
     optimizer = tf1.train.AdamOptimizer(learning_rate=cfg.learning_rate).minimize(-WSR)
 
