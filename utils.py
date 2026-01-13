@@ -126,7 +126,8 @@ def zero_forcing(channel_realization, total_power):
 
 # Computes the regularized zero-forcing solution as in "MMSE precoding for multiuser MISO downlink transmission with non-homogeneous user SNR conditions" by D.H. Nguyen and T. Le-Ngoc
 def regularized_zero_forcing(channel_realization, total_power, regularization_parameter = 0, path_loss_option = False):
-  
+  nr_of_users = channel_realization.shape[0]
+
   if path_loss_option == False:
     RZF_solution = np.matmul((np.transpose(channel_realization)),np.linalg.inv(np.matmul(np.conj(channel_realization),(np.transpose(channel_realization))) + nr_of_users/total_power*np.eye(nr_of_users, nr_of_users)))
   else:
@@ -138,7 +139,9 @@ def regularized_zero_forcing(channel_realization, total_power, regularization_pa
 
 
 # Builds one PGD iteration in the deep unfolded WMMSE network
-def PGD_step( init, name, mse_weights, user_weights, receiver_precoder,channel, initial_transmitter_precoder, total_power):
+def PGD_step(init, name, mse_weights, user_weights, receiver_precoder, channel,
+             initial_transmitter_precoder, total_power,
+             nr_of_users, nr_of_BS_antennas, nr_of_samples_per_batch):
 
   with tf1.variable_scope(name): 
 
