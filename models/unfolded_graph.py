@@ -1,8 +1,8 @@
 
 import tensorflow as tf
 from typing import Dict, Any, Tuple
-from ..config import ExperimentConfig
-from ..utils import compute_WSR_nn, PGD_step
+from config import ExperimentConfig
+from utils import compute_WSR_nn, PGD_step
 
 tf1 = tf.compat.v1
 
