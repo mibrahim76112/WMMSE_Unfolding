@@ -4,9 +4,9 @@ import time
 import numpy as np
 import tensorflow as tf
 
-from wmmse_unfolded_project.config import ExperimentConfig
-from wmmse_unfolded_project.models.unfolded_graph import build_unfolded_graph
-from wmmse_unfolded_project.utils import (
+from WMMSE_Unfolding.config import ExperimentConfig
+from WMMSE_Unfolding.models.unfolded_graph import build_unfolded_graph
+from WMMSE_Unfolding.utils import (
     compute_channel,
     run_WMMSE,
     zero_forcing,
