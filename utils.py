@@ -1,7 +1,8 @@
 
 import numpy as np
 import tensorflow as tf
-
+import copy
+import matplotlib.pyplot as plt
 tf1 = tf.compat.v1
 
 # ---------------------------
@@ -183,7 +184,8 @@ def PGD_step(init, name, mse_weights, user_weights, receiver_precoder, channel,
 
 
 
-def run_WMMSE(epsilon, channel, selected_users, total_power, noise_power, user_weights, max_nr_of_iterations, log = False):
+def run_WMMSE(epsilon, channel, selected_users, total_power, noise_power,
+              user_weights, max_nr_of_iterations, power_tolerance, log=False):
 
   nr_of_users = np.size(channel,0)
   nr_of_BS_antennas = np.size(channel,1)
@@ -325,9 +327,11 @@ def run_WMMSE(epsilon, channel, selected_users, total_power, noise_power, user_w
         mse_weights_selected_users.append(mse_weights[user_index])
         new_mse_weights_selected_users.append(new_mse_weights[user_index])
 
-    mse_weights = deepcopy(new_mse_weights)
-    transmitter_precoder = deepcopy(new_transmitter_precoder)
-    receiver_precoder = deepcopy(new_receiver_precoder)
+
+    transmitter_precoder = copy.deepcopy(new_transmitter_precoder)
+    receiver_precoder = copy.deepcopy(new_receiver_precoder)
+    mse_weights = copy.deepcopy(new_mse_weights)
+
 
     WSR.append(compute_weighted_sum_rate(user_weights, channel, transmitter_precoder, noise_power, selected_users))
     break_condition = np.absolute(np.log2(np.prod(new_mse_weights_selected_users))-np.log2(np.prod(mse_weights_selected_users)))

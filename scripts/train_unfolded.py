@@ -105,11 +105,16 @@ def main():
                 )
 
                 # WMMSE baseline
+
+
                 _, _, _, WSR_WMMSE_one = run_WMMSE(
                     cfg.epsilon, channel_realization_regular, list(cfg.scheduled_users),
                     cfg.total_power, cfg.noise_power, cfg.user_weights_regular(),
-                    cfg.nr_of_iterations_wmmse - 1, log=False
+                    cfg.nr_of_iterations_wmmse - 1,
+                    cfg.power_tolerance,
+                    log=False
                 )
+
                 WSR_WMMSE_batch += WSR_WMMSE_one
 
                 # ZF baseline
