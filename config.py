@@ -27,9 +27,9 @@ class ExperimentConfig:
     path_loss_range: Tuple[float, float] = (-5.0, 5.0)  # dB
 
     # Training / testing
-    nr_of_batches_training: int = 10000
-    nr_of_batches_test: int = 1000
-    nr_of_samples_per_batch: int = 100
+    nr_of_batches_training: int = 100
+    nr_of_batches_test: int = 10
+    nr_of_samples_per_batch: int = 8
 
     # Iterations
     nr_of_iterations_wmmse: int = 1          # baseline truncated iterations (as in notebook)
