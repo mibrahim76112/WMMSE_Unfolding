@@ -9,6 +9,10 @@ class ExperimentConfig:
     nr_of_users: int = 4
     nr_of_BS_antennas: int = 4
     scheduled_users: Tuple[int, ...] = (0, 1, 2, 3)
+    dnn_hidden = (512, 512, 512)   # you can change this
+    pgd_steps: int = 4
+
+
 
     # WMMSE stopping
     epsilon: float = 1e-4
