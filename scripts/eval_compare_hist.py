@@ -100,4 +100,7 @@ def main():
     print("Saved:", args.out_png)
 
 if __name__ == "__main__":
+    g_unf_graph = tf1.Graph()
+    g_dnn_graph = tf1.Graph()
+
     main()

@@ -16,7 +16,7 @@ def build_unfolded_graph(cfg: ExperimentConfig):
       - optimizer op
       - all_step_size1..4 tensors
     """
-    tf1.reset_default_graph()
+    #tf1.reset_default_graph()
 
     channel_input = tf1.placeholder(tf.float64, shape=None, name='channel_input')
     initial_tp = tf1.placeholder(tf.float64, shape=None, name='initial_transmitter_precoder')

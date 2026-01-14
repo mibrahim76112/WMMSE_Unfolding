@@ -3,12 +3,25 @@ import tensorflow as tf
 tf1 = tf.compat.v1
 
 def build_dnn_baseline(cfg):
-    tf1.reset_default_graph()
+    #tf1.reset_default_graph()
 
-    channel_input = tf1.placeholder(tf.float64, shape=None, name="channel_input")
-    user_weights  = tf1.placeholder(tf.float64, shape=None, name="user_weights")
+    M2 = 2 * cfg.nr_of_BS_antennas
+    K  = cfg.nr_of_users
+    B  = cfg.nr_of_samples_per_batch
 
-    x = tf.reshape(channel_input, [cfg.nr_of_samples_per_batch, -1])
+    channel_input = tf1.placeholder(
+        tf.float64,
+        shape=[B, K, M2, 2],
+        name="channel_input"
+    )
+    user_weights = tf1.placeholder(
+        tf.float64,
+        shape=[B, K, 1],
+        name="user_weights"
+    )
+
+    in_dim = K * M2 * 2
+    x = tf.reshape(channel_input, [B, in_dim])
 
     with tf1.variable_scope("dnn_baseline"):
         h = x
@@ -17,17 +30,14 @@ def build_dnn_baseline(cfg):
                 width, activation="relu", dtype="float64", name=f"fc{li+1}"
             )(h)
 
-        out_dim = cfg.nr_of_users * (2 * cfg.nr_of_BS_antennas) * 1
+        out_dim = K * M2 * 1
         y = tf1.keras.layers.Dense(
             out_dim, activation=None, dtype="float64", name="out"
         )(h)
 
-    precoder = tf.reshape(
-        y,
-        [cfg.nr_of_samples_per_batch, cfg.nr_of_users, 2 * cfg.nr_of_BS_antennas, 1],
-        name="precoder_raw"
-    )
+    precoder = tf.reshape(y, [B, K, M2, 1], name="precoder_raw")
 
+    # enforce total power constraint per sample
     power = tf.reduce_sum(tf.square(precoder), axis=[1,2,3], keepdims=True) + 1e-12
     scale = tf.sqrt(tf.cast(cfg.total_power, tf.float64) / power)
     precoder = tf.identity(precoder * scale, name="precoder")
