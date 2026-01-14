@@ -3,11 +3,6 @@ import tensorflow as tf
 tf1 = tf.compat.v1
 
 def build_dnn_baseline(cfg):
-    """
-    Black-box DNN baseline:
-      input: channel_input  shape [B, K, 2M, 2M] or [B, K, 2M, 2] depending on your mapping
-      output: precoder      shape [B, K, 2M, 1] (real-valued stacked form)
-    """
     tf1.reset_default_graph()
 
     channel_input = tf1.placeholder(tf.float64, shape=None, name="channel_input")
@@ -18,10 +13,14 @@ def build_dnn_baseline(cfg):
     with tf1.variable_scope("dnn_baseline"):
         h = x
         for li, width in enumerate(cfg.dnn_hidden):
-            h = tf1.layers.dense(h, width, activation=tf.nn.relu, name=f"fc{li+1}")
+            h = tf1.keras.layers.Dense(
+                width, activation="relu", dtype="float64", name=f"fc{li+1}"
+            )(h)
 
         out_dim = cfg.nr_of_users * (2 * cfg.nr_of_BS_antennas) * 1
-        y = tf1.layers.dense(h, out_dim, activation=None, name="out")
+        y = tf1.keras.layers.Dense(
+            out_dim, activation=None, dtype="float64", name="out"
+        )(h)
 
     precoder = tf.reshape(
         y,
@@ -29,8 +28,6 @@ def build_dnn_baseline(cfg):
         name="precoder_raw"
     )
 
-    # Enforce total power constraint by scaling each sample
-    # Total power is sum_k ||v_k||^2, where v_k is real-stacked.
     power = tf.reduce_sum(tf.square(precoder), axis=[1,2,3], keepdims=True) + 1e-12
     scale = tf.sqrt(tf.cast(cfg.total_power, tf.float64) / power)
     precoder = tf.identity(precoder * scale, name="precoder")
