@@ -37,7 +37,7 @@ def main():
     with tf1.Session() as sess:
         sess.run(tf1.global_variables_initializer())
         t0 = time.time()
-
+        print('Size of batches:', cfg.nr_of_samples_per_batch)
         for it in range(cfg.nr_of_batches_training):
             batch_ch = []
             for _ in range(cfg.nr_of_samples_per_batch):
@@ -56,7 +56,8 @@ def main():
 
             if (it + 1) % 500 == 0:
                 wsr_val = sess.run(WSR, feed_dict=feed)
-                print(f"iter {it+1}/{cfg.nr_of_batches_training} | WSR={wsr_val/cfg.nr_of_samples_per_batch:.4f}")
+                print(f"iter {it+1}/{cfg.nr_of_batches_training} | WSR={float(wsr_val)/cfg.nr_of_samples_per_batch:.4f}")
+
 
         print("Training took:", time.time() - t0)
         saver.save(sess, ckpt_path)
